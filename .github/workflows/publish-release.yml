@@ -34,12 +34,14 @@ jobs:
           dotnet publish --configuration Release --runtime win-x86 --self-contained true -p:PublishTrimmed=true -o ./bin/Publish/win-x86-x64
           dotnet publish --configuration Release --runtime linux-arm --self-contained true -p:PublishTrimmed=true -o ./bin/Publish/linux-arm
           dotnet publish --configuration Release --runtime linux-x64 --self-contained true -p:PublishTrimmed=true -o ./bin/Publish/linux-x64
+          dotnet publish --configuration Release --runtime linux-x86 --self-contained true -p:PublishTrimmed=true -o ./bin/Publish/linux-x86
           dotnet publish --configuration Release --runtime osx-x64 --self-contained true -p:PublishTrimmed=true -o ./bin/Publish/osx-x64
           cd ./bin/Publish
           zip -q -r bilibili-tool-pro-v${{ github.event.inputs.version }}-dotnet-dependent.zip ./dotnet-dependent/*
           zip -q -r bilibili-tool-pro-v${{ github.event.inputs.version }}-win-x86-x64.zip ./win-x86-x64/*
           zip -q -r bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-arm.zip ./linux-arm/*
           zip -q -r bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-x64.zip ./linux-x64/*
+          zip -q -r bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-x86.zip ./linux-x86/*
           zip -q -r bilibili-tool-pro-v${{ github.event.inputs.version }}-osx-x64.zip ./osx-x64/*
           cp -r ../../../../tencentScf/bootstrap ../../../../tencentScf/index.sh ./linux-x64/
           cd ./linux-x64
@@ -99,6 +101,17 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./src/Ray.BiliBiliTool.Console/bin/Publish/bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-x64.zip
           asset_name: bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-x64.zip
+          asset_content_type: application/zip
+          
+      - name: Upload linux-x86
+        id: upload-linux-x86
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./src/Ray.BiliBiliTool.Console/bin/Publish/bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-x86.zip
+          asset_name: bilibili-tool-pro-v${{ github.event.inputs.version }}-linux-x86.zip
           asset_content_type: application/zip
 
       - name: Upload osx-x64
